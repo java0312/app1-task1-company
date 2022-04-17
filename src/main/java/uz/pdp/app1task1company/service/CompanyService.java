@@ -9,6 +9,7 @@ import uz.pdp.app1task1company.payload.CompanyDto;
 import uz.pdp.app1task1company.repository.AddressRepository;
 import uz.pdp.app1task1company.repository.CompanyRepository;
 import uz.pdp.app1task1company.repository.DepartmentRepository;
+import uz.pdp.app1task1company.repository.WorkerRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,9 @@ public class CompanyService {
 
     @Autowired
     DepartmentRepository departmentRepository;
+
+    @Autowired
+    WorkerRepository workerRepository;
 
     //__GET ALL
     public List<Company> getAllCompanies() {
@@ -90,6 +94,7 @@ public class CompanyService {
         if (optionalCompany.isEmpty())
             return new ApiResponse("Company not found!", false);
 
+        workerRepository.deleteAllByDepartment_CompanyId(id);
         departmentRepository.deleteAllByCompanyId(id);
         companyRepository.deleteById(id);
         return new ApiResponse("company deleted!", true, optionalCompany.get());
